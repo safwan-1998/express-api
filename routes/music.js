@@ -15,6 +15,17 @@ router.get('/allmusic', (req, res) => {
         })
 })
 
+router.get('/getmusic/:musicid', (req, res) => {
+
+    models.music.findOne({
+        where: {id : req.params.musicid}
+    }).then((data)=>{
+        res.status(200).send(data);        
+    }).catch((err)=>{
+        res.status(400).send(err);
+    })
+})
+
 router.patch('/updatemusic/:musicid', (req, res) => {
     const data = req.body;
 
