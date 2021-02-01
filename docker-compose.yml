@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  web:
+    build: .
+    depends_on:
+      - postgres-db
+    ports:
+      - "5000:5000"
+
+  postgres-db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: Safwanman@2
+    ports:
+      - "5432:5432"
+
+  seed:
+    build: .
+    depends_on:
+      - postgres-db
+    command : sh -c "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/sequelize db:seed:all"
+    
