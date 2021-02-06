@@ -61,7 +61,6 @@
 
 ### Response
     200 Ok
-    404 id not found
 
 
 ### Installation
