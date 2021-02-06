@@ -1,8 +1,8 @@
 # express-api
 
-### END POINTS
+## END POINTS
 
-## Create a new Thing
+# Create a new Thing
 
 ### Request
 
