@@ -1,0 +1,128 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Music Api",
+    "description": "Guide regarding using music api",
+    "version": "0.1.9"
+  },
+  "paths": {
+    "/api/allmusic": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/getmusic/{musicid}": {
+      "get": {
+        "description": "Get record based on id",
+        "parameters": [
+          {
+            "name": "musicid",
+            "in": "path",
+            "required":true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+      },
+    "/api/addmusic": {
+      "post": {
+        "requestBody": {
+          "description": "Creates a new music record",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "writer": {
+                    "type": "string"
+                  },
+                  "singer": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200" : {
+            "description": "Successfully Created"
+          }
+        }
+      }
+    },
+    "/api/updatemusic/{musicid}": {
+      "patch": {
+        "parameters": [
+          {
+            "name": "musicid",
+            "in": "path",
+            "required":true
+          }
+        ],
+        "requestBody": {
+          "description": "Update record based on id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "writer": {
+                    "type": "string"
+                  },
+                  "singer": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200" : {
+            "description": "Successfully Created"
+          }
+        }
+      }
+    },
+    "/api/deletemusic/{musicid}": {
+      "delete": {
+        "description": "Delete record based on id",
+        "parameters": [
+          {
+            "name": "musicid",
+            "in": "path",
+            "required":true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+      }
+  }
+}

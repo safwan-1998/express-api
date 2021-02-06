@@ -1,16 +1,17 @@
 const express = require('express');
 const bodyparser = require('body-parser');
-const music = require('./routes/music')
 
 const app = express();
 
-app.use(bodyparser.json())
-app.use(logger)
-app.use('/api', music)
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('./swagger.json');
 
-function logger(req, res, next) {
-    console.log('WELCOME !!!!')
-    next()
-}
+const music = require('./routes/music');
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use('/api', music);
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJsDoc));
 
 app.listen(5000);
