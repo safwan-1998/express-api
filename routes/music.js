@@ -3,70 +3,98 @@ const models = require('../models');
 
 const router = express.Router();
 
+const error = (err, res) => {
+  const response = {
+    statusCode: 400,
+    error: err.message,
+  };
+  return res.status(response.statusCode).send(response);
+};
+
+const idNotFound = (res) => {
+  const response = {
+    statusCode: 404,
+    error: 'no record based on this id',
+  };
+  return res.status(response.statusCode).send(response);
+};
+
+const success = (rows, data, res, req) => {
+  const response = {};
+
+  if (req.method === 'PATCH') {
+    response.statusCode = 200;
+    response.body = `${rows[0]} row updated successfully !!!`;
+  } else if (req.method === 'DELETE') {
+    response.statusCode = 200;
+    response.body = `${rows} row deleted successfully !!!`;
+  } else if (req.method === 'GET') {
+    response.statusCode = 200;
+    response.body = data;
+  } else {
+    response.statusCode = 200;
+    response.body = 'record added successfully !!';
+  }
+
+  return res.status(response.statusCode).send(response);
+};
+
 router.get('/allmusic', (req, res) => {
   models.music.findAll()
     .then((data) => {
-      res.status(200).send(data);
+      success(0, data, res, req);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      error(err, res);
     });
 });
 
 router.get('/getmusic/:musicid', (req, res) => {
   const id = req.params.musicid;
-  const response = {};
 
   models.music.findOne({
     where: { id },
   }).then((data) => {
     if (data === null) {
-      response.message = 'no record based on this id';
-      res.status(404).send(response);
+      idNotFound(res);
     } else {
-      res.status(200).send(data);
+      success(0, data, res, req);
     }
   }).catch((err) => {
-    res.status(400).send(err);
+    error(err, res);
   });
 });
 
 router.patch('/updatemusic/:musicid', (req, res) => {
   const params = req.body;
   const id = req.params.musicid;
-  const response = {};
 
   models.music.update(params, {
     where: { id },
   }).then((rowsUpdated) => {
     if (rowsUpdated[0] === 0) {
-      response.message = 'no record based on this id';
-      res.status(404).send(response);
+      idNotFound(res);
     } else {
-      response.message = `${rowsUpdated[0]} row updated successfully !!!`;
-      res.status(200).send(response);
+      success(rowsUpdated, null, res, req);
     }
   }).catch((err) => {
-    res.status(400).send(err);
+    error(err, res);
   });
 });
 
 router.delete('/deletemusic/:musicid', (req, res) => {
   const id = req.params.musicid;
-  const response = {};
 
   models.music.destroy({
     where: { id },
   }).then((rowsDeleted) => {
     if (rowsDeleted === 0) {
-      response.message = 'no record based on this id';
-      res.status(404).send(response);
+      idNotFound(res);
     } else {
-      response.message = `${rowsDeleted} row deleted successfully !!!`;
-      res.status(200).send(response);
+      success(rowsDeleted, null, res, req);
     }
   }).catch((err) => {
-    res.status(400).send(err);
+    error(err, res);
   });
 });
 
@@ -80,10 +108,10 @@ router.post('/addmusic', (req, res) => {
 
   models.music.create(params)
     .then((data) => {
-      res.status(200).send(data);
+      success(0, data, res, req);
     })
     .catch((err) => {
-      res.send(400).send(err);
+      error(err, res);
     });
 });
 
